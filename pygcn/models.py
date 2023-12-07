@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from pygcn.layers import GraphConvolution, CRF, Pool, Upool, CRF_NN
+from pygcn.layers import GraphConvolution,  CRF_NN#,CRF, Pool, Upool
 
 
 class GCN(nn.Module):
@@ -9,10 +9,10 @@ class GCN(nn.Module):
 
         self.gc1 = GraphConvolution(nfeat, nhid)
         self.gc2 = GraphConvolution(nhid, nclass)
-        self.gcpool = GraphConvolution(nhid, nhid)
-        self.crf = CRF(nhid, nhid," ")
-        self.pool = Pool(nhid, 0.5, 2)
-        self.upool = Upool(nhid,0.6)
+        #self.gcpool = GraphConvolution(nhid, nhid)
+        #self.crf = CRF(nhid, nhid," ")
+        #self.pool = Pool(nhid, 0.5, 2)
+        #self.upool = Upool(nhid,0.6)
         self.dropout = dropout
         self.crf_nn = CRF_NN(nhid,nhid,2)
 

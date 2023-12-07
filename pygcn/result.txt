@@ -1,3 +1,9 @@
 epoch : 200 ,drop : 0.500000 , lr : 0.010000 test loss : 0.59771, test acc : 0.82800
 epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.60591, test acc : 0.82500
 epoch : 200 ,hidden_dim : 64,drop : 0.500000 , lr : 0.010000 test loss : 0.63513, test acc : 0.82500
+epoch : 200 ,hidden_dim : 64,drop : 0.500000 , lr : 0.010000 test loss : 0.62208, test acc : 0.82800
+epoch : 200 ,hidden_dim : 64,drop : 0.500000 , lr : 0.010000 test loss : 0.62381, test acc : 0.82600
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.59183, test acc : 0.82700
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.60277, test acc : 0.82800
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.61820, test acc : 0.82400
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.59814, test acc : 0.83200

@@ -43,8 +43,7 @@ class GraphConvolution(Module):
             + str(self.in_features) + ' -> ' \
             + str(self.out_features) + ')'
 
-
-class Pool(Module):
+'''class Pool(Module):
     def __init__(self, in_feature, top_k_ratio, a_order):
         super(Pool, self).__init__()
         self.y = None
@@ -138,11 +137,11 @@ class Upool(Module):
         adj_zeros.to_sparse_coo()
 
         return x, adj_zeros
+'''
 
 
 """自己加的CRF模块，用于构建经过gcn卷积得到的隐藏层之间相似的表示关系"""
-
-
+'''
 class CRF(Module):
     def __init__(self, infeature, outfeature, mode='None'):
         super(CRF, self).__init__()
@@ -195,6 +194,7 @@ class CRF(Module):
 
         return x
 
+'''
 
 class CRF_NN(Module):
     def __init__(self, in_dim, out_dim, num_iters, **kwargs):
