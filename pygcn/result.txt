@@ -7,3 +7,52 @@ epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.5918
 epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.60277, test acc : 0.82800
 epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.61820, test acc : 0.82400
 epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.59814, test acc : 0.83200
+CRF_Node
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 3.01834, test acc : 0.30900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.89290, test acc : 0.30900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.89501, test acc : 0.30900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.87843, test acc : 0.30900
+CRF_Node 中 alpa X + B Node：
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.62401, test acc : 0.80400
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.63393, test acc : 0.81700
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.79387, test acc : 0.79600
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.59881, test acc : 0.79900
+无layernorm
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 3.00483, test acc : 0.30900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 2.03912, test acc : 0.30900
+有LM
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.04410, test acc : 0.74900
+CRF 3lyaer
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.59679, test acc : 0.83000
+epoch : 100 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.02842, test acc : 0.77800
+epoch : 150 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.01214, test acc : 0.74900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.99775, test acc : 0.79200
+epoch : 200 ,hidden_dim : 128,drop : 0.900000 , lr : 0.010000 test loss : 0.79858, test acc : 0.77400
+epoch : 200 ,hidden_dim : 128,drop : 0.900000 , lr : 0.019000 test loss : 1.86978, test acc : 0.30900
+epoch : 200 ,hidden_dim : 128,drop : 0.900000 , lr : 0.019000 test loss : 0.82574, test acc : 0.76500
+epoch : 200 ,hidden_dim : 128,drop : 0.700000 , lr : 0.019000 test loss : 1.01492, test acc : 0.75400
+epoch : 200 ,hidden_dim : 128,drop : 0.700000 , lr : 0.019000 test loss : 0.87304, test acc : 0.78600
+epoch : 200 ,hidden_dim : 256,drop : 0.700000 , lr : 0.019000 test loss : 0.61703, test acc : 0.79100
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.57962, test acc : 0.81900
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.010000 test loss : 0.69191, test acc : 0.80900
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.010000 test loss : 0.56872, test acc : 0.80900
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.010000 test loss : 0.62623, test acc : 0.79800
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.020000 test loss : 0.57814, test acc : 0.79700
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.029000 test loss : 1.56850, test acc : 0.35700
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.015000 test loss : 0.70295, test acc : 0.80800
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.62916, test acc : 0.78500
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.58031, test acc : 0.80900
+CRF-2
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 1.93308, test acc : 0.30900
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.67315, test acc : 0.81300
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.59408, test acc : 0.80400
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.71497, test acc : 0.74300
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.60711, test acc : 0.80200
+epoch : 200 ,hidden_dim : 256,drop : 0.500000 , lr : 0.019000 test loss : 0.58717, test acc : 0.81500
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.019000 test loss : 1.45657, test acc : 0.72900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.84996, test acc : 0.80900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.06408, test acc : 0.80000
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.86492, test acc : 0.81400
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.34683, test acc : 0.78800
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.62744, test acc : 0.80900
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.92047, test acc : 0.82400
