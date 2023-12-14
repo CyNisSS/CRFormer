@@ -14,8 +14,8 @@ class GCN(nn.Module):
         #self.pool = Pool(nhid, 0.5, 2)
         #self.upool = Upool(nhid,0.6)
         self.dropout = dropout
-        self.crf_nn = CRF_NN(nhid,nhid,2)
-        self.crf_node = CRF_Node(nhid, nhid,3)
+        #self.crf_nn = CRF_NN(nhid,nhid,2)
+        self.crf_node = CRF_Node(nhid, nhid, 3)
         self.layer_norm = nn.LayerNorm(nhid)
 
     def forward(self, x, adj):

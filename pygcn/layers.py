@@ -8,6 +8,8 @@ from torch.nn.modules.module import Module
 import torch.nn.functional as F
 
 BIG_CONSTANT = 1e8
+
+
 class GraphConvolution(Module):
     """
     Simple GCN layer, similar to https://arxiv.org/abs/1609.02907
@@ -218,7 +220,7 @@ class CRF_NN(Module):
         similarity = F.softmax(F.leaky_relu(logits), dim=1)
         gi = torch.sum(similarity, dim=1, keepdim=True)
         gi = F.normalize(gi)
-        #print(gi.shape)
+        # print(gi.shape)
 
         alpha = torch.exp(self.alpha)
         beta = torch.exp(self.beta)
@@ -228,6 +230,7 @@ class CRF_NN(Module):
         print(alpha)
         print(beta)
         return output
+
 
 def create_projection_matrix(m, d, seed=0, scaling=0, struct_mode=False):
     nb_full_blocks = int(m / d)
@@ -291,7 +294,9 @@ def softmax_kernel_transformation(data, is_query, projection_matrix=None, numeri
         )
     return data_dash
 
-def kernelized_softmax(query, key, value, kernel_transformation, projection_matrix=None, edge_index=None, tau=0.25, return_weight=False):
+
+def kernelized_softmax(query, key, value, kernel_transformation, projection_matrix=None, edge_index=None, tau=0.25,
+                       return_weight=False):
     '''
     fast computation of all-pair attentive aggregation with linear complexity
     input: query/key/value [B, N, H, D]
@@ -301,11 +306,11 @@ def kernelized_softmax(query, key, value, kernel_transformation, projection_matr
     '''
     query = query / math.sqrt(tau)
     key = key / math.sqrt(tau)
-    query_prime = kernel_transformation(query, True, projection_matrix) # [B, N, H, M]
-    key_prime = kernel_transformation(key, False, projection_matrix) # [B, N, H, M]
-    query_prime = query_prime.permute(1, 0, 2, 3) # [N, B, H, M]
-    key_prime = key_prime.permute(1, 0, 2, 3) # [N, B, H, M]
-    value = value.permute(1, 0, 2, 3) # [N, B, H, D]
+    query_prime = kernel_transformation(query, True, projection_matrix)  # [B, N, H, M]
+    key_prime = kernel_transformation(key, False, projection_matrix)  # [B, N, H, M]
+    query_prime = query_prime.permute(1, 0, 2, 3)  # [N, B, H, M]
+    key_prime = key_prime.permute(1, 0, 2, 3)  # [N, B, H, M]
+    value = value.permute(1, 0, 2, 3)  # [N, B, H, D]
 
     # compute updated node emb, this step requires O(N)
     z_num = numerator(query_prime, key_prime, value)
@@ -314,17 +319,75 @@ def kernelized_softmax(query, key, value, kernel_transformation, projection_matr
     z_num = z_num.permute(1, 0, 2, 3)  # [B, N, H, D]
     z_den = z_den.permute(1, 0, 2)
     z_den = torch.unsqueeze(z_den, len(z_den.shape))
-    z_output = z_num / z_den # [B, N, H, D]
+    z_output = z_num / z_den  # [B, N, H, D]
 
-    if return_weight: # query edge prob for computing edge-level reg loss, this step requires O(E)
+    if return_weight:  # query edge prob for computing edge-level reg loss, this step requires O(E)
         start, end = edge_index
-        query_end, key_start = query_prime[end], key_prime[start] # [E, B, H, M]
-        edge_attn_num = torch.einsum("ebhm,ebhm->ebh", query_end, key_start) # [E, B, H]
-        edge_attn_num = edge_attn_num.permute(1, 0, 2) # [B, E, H]
-        attn_normalizer = denominator(query_prime, key_prime) # [N, B, H]
+        query_end, key_start = query_prime[end], key_prime[start]  # [E, B, H, M]
+        edge_attn_num = torch.einsum("ebhm,ebhm->ebh", query_end, key_start)  # [E, B, H]
+        edge_attn_num = edge_attn_num.permute(1, 0, 2)  # [B, E, H]
+        attn_normalizer = denominator(query_prime, key_prime)  # [N, B, H]
         edge_attn_dem = attn_normalizer[end]  # [E, B, H]
-        edge_attn_dem = edge_attn_dem.permute(1, 0, 2) # [B, E, H]
-        A_weight = edge_attn_num / edge_attn_dem # [B, E, H]
+        edge_attn_dem = edge_attn_dem.permute(1, 0, 2)  # [B, E, H]
+        A_weight = edge_attn_num / edge_attn_dem  # [B, E, H]
+
+        return z_output, A_weight
+
+    else:
+        return z_output, z_den
+
+
+def numerator_gumbel(qs, ks, vs):
+    kvs = torch.einsum("nbhkm,nbhd->bhkmd", ks, vs)  # kvs refers to U_k in the paper
+    return torch.einsum("nbhm,bhkmd->nbhkd", qs, kvs)
+
+
+def denominator_gumbel(qs, ks):
+    all_ones = torch.ones([ks.shape[0]]).to(qs.device)
+    ks_sum = torch.einsum("nbhkm,n->bhkm", ks, all_ones)  # ks_sum refers to O_k in the paper
+    return torch.einsum("nbhm,bhkm->nbhk", qs, ks_sum)
+
+
+def kernelized_gumbel_softmax(query, key, value, kernel_transformation, projection_matrix=None, edge_index=None,
+                              K=10, tau=0.25, return_weight=False):
+    '''
+    fast computation of all-pair attentive aggregation with linear complexity
+    input: query/key/value [B, N, H, D]
+    return: updated node emb, attention weight (for computing edge loss)
+    B = graph number (always equal to 1 in Node Classification), N = node number, H = head number,
+    M = random feature dimension, D = hidden size, K = number of Gumbel sampling
+    '''
+    query = query / math.sqrt(tau)
+    key = key / math.sqrt(tau)
+    query_prime = kernel_transformation(query, True, projection_matrix)  # [B, N, H, M]
+    key_prime = kernel_transformation(key, False, projection_matrix)  # [B, N, H, M]
+    query_prime = query_prime.permute(1, 0, 2, 3)  # [N, B, H, M]
+    key_prime = key_prime.permute(1, 0, 2, 3)  # [N, B, H, M]
+    value = value.permute(1, 0, 2, 3)  # [N, B, H, D]
+
+    # compute updated node emb, this step requires O(N)
+    gumbels = (
+                  -torch.empty(key_prime.shape[:-1] + (K,),
+                               memory_format=torch.legacy_contiguous_format).exponential_().log()
+              ).to(query.device) / tau  # [N, B, H, K]
+    key_t_gumbel = key_prime.unsqueeze(3) * gumbels.exp().unsqueeze(4)  # [N, B, H, K, M]
+    z_num = numerator_gumbel(query_prime, key_t_gumbel, value)  # [N, B, H, K, D]
+    z_den = denominator_gumbel(query_prime, key_t_gumbel)  # [N, B, H, K]
+
+    z_num = z_num.permute(1, 0, 2, 3, 4)  # [B, N, H, K, D]
+    z_den = z_den.permute(1, 0, 2, 3)  # [B, N, H, K]
+    z_den = torch.unsqueeze(z_den, len(z_den.shape))
+    z_output = torch.mean(z_num / z_den, dim=3)  # [B, N, H, D]
+
+    if return_weight:  # query edge prob for computing edge-level reg loss, this step requires O(E)
+        start, end = edge_index
+        query_end, key_start = query_prime[end], key_prime[start]  # [E, B, H, M]
+        edge_attn_num = torch.einsum("ebhm,ebhm->ebh", query_end, key_start)  # [E, B, H]
+        edge_attn_num = edge_attn_num.permute(1, 0, 2)  # [B, E, H]
+        attn_normalizer = denominator(query_prime, key_prime)  # [N, B, H]
+        edge_attn_dem = attn_normalizer[end]  # [E, B, H]
+        edge_attn_dem = edge_attn_dem.permute(1, 0, 2)  # [B, E, H]
+        A_weight = edge_attn_num / edge_attn_dem  # [B, E, H]
 
         return z_output, A_weight
 
@@ -333,19 +396,20 @@ def kernelized_softmax(query, key, value, kernel_transformation, projection_matr
 
 
 def numerator(qs, ks, vs):
-    kvs = torch.einsum("nbhm,nbhd->bhmd", ks, vs) # kvs refers to U_k in the paper
+    kvs = torch.einsum("nbhm,nbhd->bhmd", ks, vs)  # kvs refers to U_k in the paper
     return torch.einsum("nbhm,bhmd->nbhd", qs, kvs)
+
 
 def denominator(qs, ks):
     all_ones = torch.ones([ks.shape[0]]).to(qs.device)
-    ks_sum = torch.einsum("nbhm,n->bhm", ks, all_ones) # ks_sum refers to O_k in the paper
+    ks_sum = torch.einsum("nbhm,n->bhm", ks, all_ones)  # ks_sum refers to O_k in the paper
     return torch.einsum("nbhm,bhm->nbh", qs, ks_sum)
 
 
-
 class CRF_Node(Module):
-    def __init__(self, in_dim, out_dim, hidden=128, num_iters=2,num_heads=4,kernel_transformation=softmax_kernel_transformation,
-                 projection_matrix_type='a',random_features=64, **kwargs):
+    def __init__(self, in_dim, out_dim, hidden=128, num_iters=2, num_heads=4,
+                 kernel_transformation=softmax_kernel_transformation,
+                 projection_matrix_type='a', random_features=64, nb_gumbel_sample=10,use_gumbel=True, **kwargs):
         super(CRF_Node, self).__init__()
         self.in_dim = in_dim
         self.out_dim = out_dim
@@ -355,13 +419,15 @@ class CRF_Node(Module):
         self.alpha = nn.Parameter(torch.zeros(1))
         self.beta = nn.Parameter(torch.zeros(1))
         self.num_heads = num_heads
-        self.Wq = nn.Linear(in_dim,num_heads*hidden)
-        self.Wk = nn.Linear(in_dim,num_heads*hidden)
-        self.Wv = nn.Linear(in_dim,num_heads*hidden)
-        self.Wo = nn.Linear(num_heads*hidden,out_dim)
+        self.Wq = nn.Linear(in_dim, num_heads * hidden)
+        self.Wk = nn.Linear(in_dim, num_heads * hidden)
+        self.Wv = nn.Linear(in_dim, num_heads * hidden)
+        self.Wo = nn.Linear(num_heads * hidden, out_dim)
         self.kernel_transformation = kernel_transformation
         self.projection_matrix_type = projection_matrix_type
         self.random_features = random_features
+        self.nb_gumbel_sample = nb_gumbel_sample
+        self.use_gumbel = use_gumbel
 
     def reset_parameters(self):
         self.Wq.reset_parameters()
@@ -371,19 +437,26 @@ class CRF_Node(Module):
 
     def forward(self, x, adj, tau=0.09):
         output = x
-        N,D = x.size(0),x.size(1)
-        query = self.Wq(x).reshape(-1,N,self.num_heads,self.hidden)
-        key = self.Wk(x).reshape(-1,N,self.num_heads,self.hidden)
-        value = self.Wv(x).reshape(-1,N,self.num_heads,self.hidden)
+        N, D = x.size(0), x.size(1)
+        query = self.Wq(x).reshape(-1, N, self.num_heads, self.hidden)
+        key = self.Wk(x).reshape(-1, N, self.num_heads, self.hidden)
+        value = self.Wv(x).reshape(-1, N, self.num_heads, self.hidden)
 
         seed = torch.ceil(torch.abs(torch.sum(query) * BIG_CONSTANT)).to(torch.int32)
-        projection_matrix = create_projection_matrix(self.random_features,self.hidden,seed=seed)
+        projection_matrix = create_projection_matrix(self.random_features, self.hidden, seed=seed)
+
+        if self.use_gumbel and self.training:  # only using Gumbel noise for training
+            x_next, x_den = kernelized_gumbel_softmax(query,key,value,self.kernel_transformation,projection_matrix,adj,
+                                                  self.nb_gumbel_sample, tau)
+        else:
+            x_next,x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj,
+                                                tau)
 
         x_next, x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj, tau)
-        x_next = self.Wo(x_next.flatten(-2, -1)).squeeze(0) # 1x N x (h*d) -> Nxout_dim
-        #print(x_den.shape)
-        #x_den = x_den.flatten(-2,-1).squeeze(0)
-        #x_den = self.alpha + self.beta * x_den
+        x_next = self.Wo(x_next.flatten(-2, -1)).squeeze(0)  # 1x N x (h*d) -> Nxout_dim
+        # print(x_den.shape)
+        # x_den = x_den.flatten(-2,-1).squeeze(0)
+        # x_den = self.alpha + self.beta * x_den
         alpha = torch.exp(self.alpha)
         beta = torch.exp(self.beta)
         for i in range(self.num_iters):
@@ -406,4 +479,3 @@ class CRF_Node(Module):
             output = (alpha * x + beta * gi * output)
             output = output / (alpha + beta * gi)'''
         return output
-
