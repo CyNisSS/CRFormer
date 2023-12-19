@@ -9,8 +9,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from scipy.linalg import fractional_matrix_power
+from torch_geometric.utils import to_undirected, remove_self_loops, add_self_loops
 
-from pygcn.utils import load_data, accuracy
+
+from pygcn.utils import load_data, accuracy,load_dataset,load_citation_data
 from pygcn.models import GCN
 
 # Training settings
@@ -28,10 +31,15 @@ parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
 parser.add_argument('--hidden', type=int, default=128,
                     help='Number of hidden units.')
-parser.add_argument('--dropout', type=float, default=0.5,
+parser.add_argument('--dropout', type=float, default=0.1,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--dataset', type=str, default='cora',
+parser.add_argument('--dataname', type=str, default='cora',
                     help='dataset name')
+parser.add_argument('--data_dir', type=str, default='../data/',
+                    help='data dir')
+parser.add_argument('--tau', type=float, default=0.09,
+                    help='temperature in gumbel ')
+
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -41,8 +49,37 @@ torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
+dataset = load_dataset(args.data_dir, args.dataname)
+
+adj_norm, adj, features, labels, idx_train, idx_val, idx_test = load_citation_data(dataset)
+
+
+# generate A_hat
+'''adj = adj + np.eye(adj.shape[0])
+row_sum = np.array(np.sum(adj,axis=1))
+degree_matrix = np.matrix(np.diag(row_sum))
+
+D = fractional_matrix_power(degree_matrix, -0.5)
+adj = D.dot(adj).dot(D)'''
+
+adj = torch.FloatTensor(adj_norm)
+print(adj)
+
+adj1 = torch.FloatTensor(adj_norm)
+print('if adj_hat == adj_norm: ?', adj==adj1)
+#adj = torch.FloatTensor(adj_norm)
+
+#print('idx:',idx_train, idx_val, idx_test)# 0-139; 140-640; 1708-2707
+
+"""print(dataset.graph)
+n = dataset.graph['num_nodes']
+adjs, _ = remove_self_loops(dataset.graph['edge_index'])
+adjs, _ = add_self_loops(adjs, num_nodes=n)
+dataset.graph['adj'] = adjs
+print('adjs:',adjs)
 # Load data
 adj, features, labels, idx_train, idx_val, idx_test = load_data()
+print(adj)"""
 
 # Model and optimizer
 model = GCN(nfeat=features.shape[1],
@@ -97,9 +134,9 @@ def test():
     print("Test set results:",
           "loss= {:.4f}".format(loss_test.item()),
           "accuracy= {:.4f}".format(acc_test.item()))
-    line_str = 'epoch : %d ,hidden_dim : %d,drop : %f , lr : %f test loss : %.5f, test acc : %.5f\n'
+    line_str = 'w_d: %.4f, tau: %.4f,epoch: %d,hidden_dim: %d,drop: %f ,lr: %f,test loss: %.5f,test acc: %.5f\n'
     with open('./result.txt', 'a+') as f:
-        f.write(line_str % (args.epochs,args.hidden, args.dropout, args.lr, loss_test, acc_test))
+        f.write(line_str % (args.weight_decay,args.tau, args.epochs,args.hidden, args.dropout, args.lr, loss_test, acc_test))
 
 
 # Train model

@@ -90,4 +90,101 @@ epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.7271
 tau：0.09，CRF_Node：def __init__(self, in_dim, out_dim, hidden=128, num_iters=2, num_heads=4,
 kernel_transformation=softmax_kernel_transformation,
 projection_matrix_type='a', random_features=64, nb_gumbel_sample=10,use_gumbel=True, **kwargs):
-epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.53482, test acc : 0.84100
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.53482, test acc : 0.84100   #######
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.60468, test acc : 0.81100
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.81977, test acc : 0.81100
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.54954, test acc : 0.81500
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.55504, test acc : 0.82500
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.65582, test acc : 0.79800
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.94902, test acc : 0.80000
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 0.52266, test acc : 0.83500
+使用planetoid加载数据集
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.39200, test acc : 0.78100
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.39200, test acc : 0.78100
+
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.69181, test acc : 0.73000
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.39200, test acc : 0.78100
+epoch : 200 ,hidden_dim : 128,drop : 0.500000 , lr : 0.010000 test loss : 1.41253, test acc : 0.78300
+tau: 0.250,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.41253,test acc: 0.78300
+tau: 0.160,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.41253,test acc: 0.78300
+tau: 0.640,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.41253,test acc: 0.78300
+tau: 0.640,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 0.640,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.91524,test acc: 0.61200
+tau: 0.100,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.83832,test acc: 0.75500
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.35326,test acc: 0.75400
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.001000,test loss: 0.99935,test acc: 0.74400
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.001000,test loss: 1.00006,test acc: 0.76000
+tau: 0.010,epoch: 200,hidden_dim: 64,drop: 0.900000 ,lr: 0.001000,test loss: 1.06690,test acc: 0.74600
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 0.98292,test acc: 0.72900
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.019000,test loss: 1.21048,test acc: 0.70800
+tau: 0.010,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 1.12680,test acc: 0.76400
+tau: 0.000,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.35326,test acc: 0.75400
++CRF
+tau: 0.0001,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 0.0001,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 1.0000,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.04689,test acc: 0.77200
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.36458,test acc: 0.78600
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.61923,test acc: 0.78300
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.001000,test loss: nan,test acc: 0.13000
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.06663,test acc: 0.78200
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.200000 ,lr: 0.010000,test loss: 0.64280,test acc: 0.81000
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.400000 ,lr: 0.010000,test loss: 1.21726,test acc: 0.77400
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.65205,test acc: 0.79000
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.300000 ,lr: 0.010000,test loss: 0.62671,test acc: 0.79900
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.300000 ,lr: 0.010000,test loss: 0.62671,test acc: 0.79900
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.300000 ,lr: 0.010000,test loss: 0.62671,test acc: 0.79900
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.300000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.001000,test loss: 1.02397,test acc: 0.76700
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.001000,test loss: 0.70221,test acc: 0.79900
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.200000 ,lr: 0.001000,test loss: 0.72640,test acc: 0.80100
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.200000 ,lr: 0.001000,test loss: nan,test acc: 0.13000
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.200000 ,lr: 0.010000,test loss: 0.94844,test acc: 0.72300
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.200000 ,lr: 0.010000,test loss: 1.91641,test acc: 0.23400
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.001000,test loss: 1.91657,test acc: 0.32600
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.001000,test loss: 1.92074,test acc: 0.52600
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.010000,test loss: 1.89656,test acc: 0.30500
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.010000,test loss: 1.89656,test acc: 0.30500
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.010000,test loss: 1.92411,test acc: 0.22000
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.010000,test loss: 1.89656,test acc: 0.30500
+tau: 0.0900,epoch: 200,hidden_dim: 64,drop: 0.500000 ,lr: 0.010000,test loss: 1.89656,test acc: 0.30500
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.88691,test acc: 0.31000
+纯CGCN：
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 0.63118,test acc: 0.81000
+GCN+CRF_NN：
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 0.63456,test acc: 0.81600
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.29472,test acc: 0.57000
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.29472,test acc: 0.57000
+GCN+CRF_Node:
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 0.70698,test acc: 0.80100
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 0.67123,test acc: 0.78400
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 0.66663,test acc: 0.79200
+tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 0.79267,test acc: 0.78500
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 0.70698,test acc: 0.80100
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.400000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 0.70698,test acc: 0.80100
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 1.91079,test acc: 0.46900
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.88486,test acc: 0.36300
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.200000 ,lr: 0.010000,test loss: 1.88744,test acc: 0.34600
+纯GCN：
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 0.64327,test acc: 0.80100
++CRF_Node：
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.15803,test acc: 0.79300
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.900000 ,lr: 0.010000,test loss: 0.75558,test acc: 0.76400
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.300000 ,lr: 0.010000,test loss: 1.06609,test acc: 0.81000
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 2.00894,test acc: 0.62100
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.500000 ,lr: 0.010000,test loss: 1.00051,test acc: 0.78000
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.200000 ,lr: 0.010000,test loss: 0.74502,test acc: 0.78700
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.300000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.600000 ,lr: 0.010000,test loss: 1.01582,test acc: 0.78700
+w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.400000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400

@@ -11,15 +11,14 @@ class GCN(nn.Module):
         self.gc2 = GraphConvolution(nhid, nclass)
         #self.gcpool = GraphConvolution(nhid, nhid)
         #self.crf = CRF(nhid, nhid," ")
-        #self.pool = Pool(nhid, 0.5, 2)
-        #self.upool = Upool(nhid,0.6)
+
         self.dropout = dropout
-        #self.crf_nn = CRF_NN(nhid,nhid,2)
-        self.crf_node = CRF_Node(nhid, nhid, 3)
+        self.crf_nn = CRF_NN(nhid,nhid,2)
+        self.crf_node = CRF_Node(nhid, nhid)
         self.layer_norm = nn.LayerNorm(nhid)
 
     def forward(self, x, adj):
-        n = x.size(0)
+
         x = F.relu(self.gc1(x, adj))
 
         #x = self.crf_nn(x)

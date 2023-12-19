@@ -376,8 +376,10 @@ def kernelized_gumbel_softmax(query, key, value, kernel_transformation, projecti
 
     z_num = z_num.permute(1, 0, 2, 3, 4)  # [B, N, H, K, D]
     z_den = z_den.permute(1, 0, 2, 3)  # [B, N, H, K]
-    z_den = torch.unsqueeze(z_den, len(z_den.shape))
-    z_output = torch.mean(z_num / z_den, dim=3)  # [B, N, H, D]
+    z_den = torch.unsqueeze(z_den, len(z_den.shape))  # [B,N,H,k,1]
+
+    #z_output = z_num
+    z_output = torch.mean(z_num / z_den, dim=3)  # [B, N, H, D]#num_heads 的聚合
 
     if return_weight:  # query edge prob for computing edge-level reg loss, this step requires O(E)
         start, end = edge_index
@@ -392,7 +394,7 @@ def kernelized_gumbel_softmax(query, key, value, kernel_transformation, projecti
         return z_output, A_weight
 
     else:
-        return z_output,z_den
+        return z_output, z_den
 
 
 def numerator(qs, ks, vs):
@@ -407,9 +409,9 @@ def denominator(qs, ks):
 
 
 class CRF_Node(Module):
-    def __init__(self, in_dim, out_dim, hidden=128, num_iters=2, num_heads=4,
+    def __init__(self, in_dim, out_dim, hidden=32, num_iters=2, num_heads=4,
                  kernel_transformation=softmax_kernel_transformation,
-                 projection_matrix_type='a', random_features=64, nb_gumbel_sample=10,use_gumbel=True, **kwargs):
+                 projection_matrix_type='a', random_features=64, nb_gumbel_sample=10, use_gumbel=True, **kwargs):
         super(CRF_Node, self).__init__()
         self.in_dim = in_dim
         self.out_dim = out_dim
@@ -435,32 +437,48 @@ class CRF_Node(Module):
         self.Wv.reset_parameters()
         self.Wo.reset_parameters()
 
-    def forward(self, x, adj, tau=0.09):
-        output = x
+    def forward(self, x, adj, tau=0.25):
+
         N, D = x.size(0), x.size(1)
+        #output = x.reshape(-1,N,self.num_heads,self.hidden)#.unsqueeze(-2).expand(-1,-1,-1,10,-1) [B,N,H,D]
+        output = x
+        print("origin x : ", output.shape)
         query = self.Wq(x).reshape(-1, N, self.num_heads, self.hidden)
         key = self.Wk(x).reshape(-1, N, self.num_heads, self.hidden)
         value = self.Wv(x).reshape(-1, N, self.num_heads, self.hidden)
 
         seed = torch.ceil(torch.abs(torch.sum(query) * BIG_CONSTANT)).to(torch.int32)
-        projection_matrix = create_projection_matrix(self.random_features, self.hidden, seed=seed)
+        projection_matrix = create_projection_matrix(self.random_features, self.hidden,
+                                                     seed=seed)  # random feature x hidden
 
         if self.use_gumbel and self.training:  # only using Gumbel noise for training
-            x_next, x_den = kernelized_gumbel_softmax(query,key,value,self.kernel_transformation,projection_matrix,adj,
-                                                  self.nb_gumbel_sample, tau)
+            x_next, x_den = kernelized_gumbel_softmax(query, key, value, self.kernel_transformation, projection_matrix,
+                                                      adj,
+                                                      self.nb_gumbel_sample, tau)
+            x_den = torch.mean(x_den, dim=3)
+            # x_den = [B, N, H, K]
         else:
-            x_next,x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj,
-                                                tau)
+            x_next, x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj,
+                                               tau)
 
-        x_next, x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj, tau)
+        # x_next, x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj, tau)
         x_next = self.Wo(x_next.flatten(-2, -1)).squeeze(0)  # 1x N x (h*d) -> Nxout_dim
+
         # print(x_den.shape)
         # x_den = x_den.flatten(-2,-1).squeeze(0)
         # x_den = self.alpha + self.beta * x_den
         alpha = torch.exp(self.alpha)
         beta = torch.exp(self.beta)
+        print('x_den',x_den.shape)
+        print('x-next',x_next.shape)
         for i in range(self.num_iters):
+            #output = torch.mean(((alpha * output + beta * x_next)/(alpha + beta * x_den)), dim=3)#[B, N, H, K, D]
             output = (alpha * output + beta * x_next)
+            #output = (alpha * output + beta * x_next)/(alpha + beta * x_den)
+        #torch.mean(output, dim=3) #[B, N, H, K, D]
+
+
+        #output = self.Wo(x_next.flatten(-2, -1)).squeeze(0)
         print(alpha)
         print(beta)
 
