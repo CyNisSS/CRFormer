@@ -188,3 +188,24 @@ w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.300000 ,lr: 0.010000
 w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.600000 ,lr: 0.010000,test loss: 1.01582,test acc: 0.78700
 w_d: 0.0080, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.400000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
 w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: nan,test acc: 0.13000
+w_d: 0.0005, tau: 0.0900,epoch: 100,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.99190,test acc: 0.81700
+w_d: 0.0005, tau: 0.0900,epoch: 150,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 1.15510,test acc: 0.80600
+w_d: 0.0005, tau: 0.0900,epoch: 100,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.99190,test acc: 0.81700
+w_d: 0.0005, tau: 0.0900,epoch: 100,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.94095,test acc: 0.81500
+w_d: 0.0005, tau: 0.0900,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.89434,test acc: 0.78500
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.80604,test acc: 0.82400
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 10.36301,test acc: 0.31400
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 10.36301,test acc: 0.31400
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.87122,test acc: 0.82100
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 0.53614,test acc: 0.83200， head=8， cora
+
+w_d: 0.0001, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 1.33169,test acc: 0.75400
+w_d: 0.0001, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 1.24958,test acc: 0.68400，citeseer
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 128,drop: 0.100000 ,lr: 0.010000,test loss: 1.64793,test acc: 0.68800
+w_d: 0.0005, tau: 0.2500,epoch: 200,hidden_dim: 64,drop: 0.100000 ,lr: 0.010000,test loss: nan,test acc: 0.07700

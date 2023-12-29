@@ -295,8 +295,7 @@ def softmax_kernel_transformation(data, is_query, projection_matrix=None, numeri
     return data_dash
 
 
-def kernelized_softmax(query, key, value, kernel_transformation, projection_matrix=None, edge_index=None, tau=0.25,
-                       return_weight=False):
+def kernelized_softmax(query, key, value, kernel_transformation, tau, projection_matrix=None, edge_index=None,  return_weight=False):
     '''
     fast computation of all-pair attentive aggregation with linear complexity
     input: query/key/value [B, N, H, D]
@@ -348,8 +347,7 @@ def denominator_gumbel(qs, ks):
     return torch.einsum("nbhm,bhkm->nbhk", qs, ks_sum)
 
 
-def kernelized_gumbel_softmax(query, key, value, kernel_transformation, projection_matrix=None, edge_index=None,
-                              K=10, tau=0.25, return_weight=False):
+def kernelized_gumbel_softmax(query, key, value, kernel_transformation, tau, K=10, projection_matrix=None, edge_index=None, return_weight=False):
     '''
     fast computation of all-pair attentive aggregation with linear complexity
     input: query/key/value [B, N, H, D]
@@ -409,7 +407,7 @@ def denominator(qs, ks):
 
 
 class CRF_Node(Module):
-    def __init__(self, in_dim, out_dim, hidden=32, num_iters=2, num_heads=4,
+    def __init__(self, in_dim, out_dim, hidden=32, num_iters=2, num_heads=8,
                  kernel_transformation=softmax_kernel_transformation,
                  projection_matrix_type='a', random_features=64, nb_gumbel_sample=10, use_gumbel=True, **kwargs):
         super(CRF_Node, self).__init__()
@@ -452,14 +450,13 @@ class CRF_Node(Module):
                                                      seed=seed)  # random feature x hidden
 
         if self.use_gumbel and self.training:  # only using Gumbel noise for training
-            x_next, x_den = kernelized_gumbel_softmax(query, key, value, self.kernel_transformation, projection_matrix,
-                                                      adj,
-                                                      self.nb_gumbel_sample, tau)
+            x_next, x_den = kernelized_gumbel_softmax(query, key, value, self.kernel_transformation, tau, self.nb_gumbel_sample, projection_matrix,
+                                                      adj)
             x_den = torch.mean(x_den, dim=3)
-            # x_den = [B, N, H, K]
+            # x_den = [B, N, H, K]#能不能把 x-den 通过Linear变成->[B,N,Hxk] - > [B,N,K]
         else:
-            x_next, x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj,
-                                               tau)
+            x_next, x_den = kernelized_softmax(query, key, value, self.kernel_transformation,tau, projection_matrix, adj
+                                               )
 
         # x_next, x_den = kernelized_softmax(query, key, value, self.kernel_transformation, projection_matrix, adj, tau)
         x_next = self.Wo(x_next.flatten(-2, -1)).squeeze(0)  # 1x N x (h*d) -> Nxout_dim
@@ -469,8 +466,8 @@ class CRF_Node(Module):
         # x_den = self.alpha + self.beta * x_den
         alpha = torch.exp(self.alpha)
         beta = torch.exp(self.beta)
-        print('x_den',x_den.shape)
-        print('x-next',x_next.shape)
+        #print('x_den',x_den.shape)
+        #print('x-next',x_next.shape)
         for i in range(self.num_iters):
             #output = torch.mean(((alpha * output + beta * x_next)/(alpha + beta * x_den)), dim=3)#[B, N, H, K, D]
             output = (alpha * output + beta * x_next)

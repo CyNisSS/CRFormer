@@ -29,15 +29,15 @@ parser.add_argument('--lr', type=float, default=0.01,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
-parser.add_argument('--hidden', type=int, default=128,
+parser.add_argument('--hidden', type=int, default=64,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.1,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--dataname', type=str, default='cora',
+parser.add_argument('--dataname', type=str, default='citeseer',
                     help='dataset name')
 parser.add_argument('--data_dir', type=str, default='../data/',
                     help='data dir')
-parser.add_argument('--tau', type=float, default=0.09,
+parser.add_argument('--tau', type=float, default=0.25,
                     help='temperature in gumbel ')
 
 
